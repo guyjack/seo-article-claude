@@ -1,18 +1,4 @@
-        // Pubblicazione post WordPress reale con integrazione AIOSEO
-        async function publishPost() {
-            if (!generatedContent.title || !generatedContent.content || !generatedImage) {
-                showError('Completa tutti i passaggi prima di pubblicare');
-                return;
-            }
-
-            document.getElementById('publishLoading').classList.add('show');
-            document.querySelector('#step5 .btn').disabled = true;
-            document.getElementById('publishText').textContent = 'Pubblicazione in corso...';
-
-            try {
-                // Step 1: Upload dell'immagine
-                const imageId = await uploadImageToWordPress(generatedImage);
-                console.log('Immagine caric<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
