@@ -1,0 +1,1135 @@
+        // Pubblicazione post WordPress reale con integrazione AIOSEO
+        async function publishPost() {
+            if (!generatedContent.title || !generatedContent.content || !generatedImage) {
+                showError('Completa tutti i passaggi prima di pubblicare');
+                return;
+            }
+
+            document.getElementById('publishLoading').classList.add('show');
+            document.querySelector('#step5 .btn').disabled = true;
+            document.getElementById('publishText').textContent = 'Pubblicazione in corso...';
+
+            try {
+                // Step 1: Upload dell'immagine
+                const imageId = await uploadImageToWordPress(generatedImage);
+                console.log('Immagine caric<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WordPress SEO Post Publisher</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        .step {
+            margin-bottom: 40px;
+            opacity: 0.5;
+            transition: all 0.3s ease;
+        }
+
+        .step.active {
+            opacity: 1;
+        }
+
+        .step.completed {
+            opacity: 0.7;
+        }
+
+        .step-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #e74c3c;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            font-weight: bold;
+        }
+
+        .step.active .step-number {
+            background: #3498db;
+        }
+
+        .step.completed .step-number {
+            background: #27ae60;
+        }
+
+        .step h3 {
+            color: #2c3e50;
+            font-size: 1.3em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e1e8ed;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #3498db;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 120px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .btn:disabled {
+            background: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60 0%, #229954 100%);
+        }
+
+        .btn-success:hover {
+            box-shadow: 0 10px 20px rgba(39, 174, 96, 0.3);
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            color: #7f8c8d;
+            font-style: italic;
+        }
+
+        .loading.show {
+            display: block;
+        }
+
+        .preview {
+            background: #f8f9fa;
+            border: 2px dashed #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 200px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .preview.has-content {
+            background: white;
+            border: 2px solid #e1e8ed;
+            color: #2c3e50;
+            font-style: normal;
+            align-items: flex-start;
+            text-align: left;
+        }
+
+        .preview img {
+            max-width: 100%;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .seo-info {
+            background: #e8f4f8;
+            border-left: 4px solid #3498db;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .seo-info h4 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        .seo-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .seo-tag {
+            background: #3498db;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 0.85em;
+        }
+
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .content {
+                padding: 20px;
+            }
+        }
+
+        .spinner {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #3498db;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 WordPress SEO Publisher</h1>
+            <p>Genera contenuti ottimizzati e pubblicali automaticamente su WordPress</p>
+        </div>
+
+        <div class="content">
+            <!-- Step 1: WordPress Credentials -->
+            <div class="step active" id="step1">
+                <div class="step-header">
+                    <div class="step-number">1</div>
+                    <h3>Configurazione WordPress</h3>
+                </div>
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="wpUrl">URL del sito WordPress</label>
+                        <input type="url" id="wpUrl" placeholder="https://tuosito.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="wpUsername">Username</label>
+                        <input type="text" id="wpUsername" placeholder="admin" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="wpPassword">Password Applicazione (Application Password)</label>
+                    <input type="password" id="wpPassword" placeholder="xxxx xxxx xxxx xxxx xxxx xxxx" required>
+                </div>
+                <button class="btn" onclick="testConnection()">
+                    <span id="connectionIcon">🔗</span>
+                    <span id="connectionText">Testa Connessione e Carica Categorie</span>
+                </button>
+                <div class="loading" id="connectionLoading">
+                    <div class="spinner"></div>
+                    Connessione in corso...
+                </div>
+            </div>
+
+            <!-- Step 2: Content Generation -->
+            <div class="step" id="step2">
+                <div class="step-header">
+                    <div class="step-number">2</div>
+                    <h3>Generazione Contenuto</h3>
+                </div>
+                <div class="form-group">
+                    <label for="topic">Argomento del Post</label>
+                    <textarea id="topic" placeholder="Inserisci l'argomento di cui vuoi scrivere..."></textarea>
+                </div>
+                <div class="grid">
+                    <div class="form-group">
+                        <label for="category">Categoria</label>
+                        <select id="category" required>
+                            <option value="">Seleziona una categoria...</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="postType">Tipo di Contenuto</label>
+                        <select id="postType">
+                            <option value="article">Articolo Informativo</option>
+                            <option value="guide">Guida Tutorial</option>
+                            <option value="news">Notizia</option>
+                            <option value="review">Recensione</option>
+                            <option value="opinion">Opinione</option>
+                        </select>
+                    </div>
+                </div>
+                <button class="btn" onclick="generateContent()">
+                    <span>✨</span>
+                    <span id="generateText">Genera Contenuto SEO</span>
+                </button>
+                <div class="loading" id="generateLoading">
+                    <div class="spinner"></div>
+                    Generazione contenuto in corso...
+                </div>
+            </div>
+
+            <!-- Step 3: Content Preview -->
+            <div class="step" id="step3">
+                <div class="step-header">
+                    <div class="step-number">3</div>
+                    <h3>Anteprima e Ottimizzazione SEO</h3>
+                </div>
+                
+                <div class="form-group">
+                    <label for="postTitle">Titolo del Post</label>
+                    <input type="text" id="postTitle" placeholder="Titolo generato automaticamente...">
+                </div>
+                
+                <div class="form-group">
+                    <label for="postContent">Contenuto</label>
+                    <textarea id="postContent" style="min-height: 300px;" placeholder="Contenuto generato automaticamente..."></textarea>
+                </div>
+
+                <div class="seo-info" id="seoInfo" style="display: none;">
+                    <h4>🎯 Ottimizzazione SEO</h4>
+                    <div class="grid">
+                        <div>
+                            <strong>Meta Description:</strong>
+                            <p id="metaDescription"></p>
+                        </div>
+                        <div>
+                            <strong>Focus Keyphrase:</strong>
+                            <p id="focusKeyphrase"></p>
+                        </div>
+                    </div>
+                    <div class="seo-tags" id="seoTags"></div>
+                </div>
+
+                <button class="btn" onclick="generateImage()">
+                    <span>🖼️</span>
+                    <span id="imageText">Genera Immagine SEO</span>
+                </button>
+                <div class="loading" id="imageLoading">
+                    <div class="spinner"></div>
+                    Generazione immagine in corso...
+                </div>
+            </div>
+
+            <!-- Step 4: Image Preview -->
+            <div class="step" id="step4">
+                <div class="step-header">
+                    <div class="step-number">4</div>
+                    <h3>Anteprima Immagine</h3>
+                </div>
+                <div class="preview" id="imagePreview">
+                    L'immagine generata apparirà qui...
+                </div>
+                <div class="form-group" style="margin-top: 20px;">
+                    <label for="imageAlt">Testo Alternativo Immagine (Alt Text)</label>
+                    <input type="text" id="imageAlt" placeholder="Descrizione SEO dell'immagine...">
+                </div>
+            </div>
+
+            <!-- Step 5: Publish -->
+            <div class="step" id="step5">
+                <div class="step-header">
+                    <div class="step-number">5</div>
+                    <h3>Pubblicazione</h3>
+                </div>
+                <button class="btn btn-success" onclick="publishPost()">
+                    <span>🚀</span>
+                    <span id="publishText">Pubblica Post su WordPress</span>
+                </button>
+                <div class="loading" id="publishLoading">
+                    <div class="spinner"></div>
+                    Pubblicazione in corso...
+                </div>
+            </div>
+
+            <div class="success-message" id="successMessage"></div>
+            <div class="error-message" id="errorMessage"></div>
+        </div>
+    </div>
+
+    <script>
+        // Configurazione API Keys - DA CONFIGURARE
+        const API_CONFIG = {
+            openai: {
+                apiKey: 'YOUR_OPENAI_API_KEY', // Inserisci la tua API key OpenAI
+                baseUrl: 'https://api.openai.com/v1'
+            },
+            stability: {
+                apiKey: 'YOUR_STABILITY_API_KEY', // Inserisci la tua API key Stability AI
+                baseUrl: 'https://api.stability.ai/v1'
+            }
+        };
+
+        let wpConfig = {};
+        let generatedContent = {};
+        let generatedImage = null;
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.style.display = 'block';
+            setTimeout(() => {
+                errorDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function showSuccess(message) {
+            const successDiv = document.getElementById('successMessage');
+            successDiv.textContent = message;
+            successDiv.style.display = 'block';
+            setTimeout(() => {
+                successDiv.style.display = 'none';
+            }, 5000);
+        }
+
+        function activateStep(stepNumber) {
+            document.querySelectorAll('.step').forEach(step => {
+                step.classList.remove('active');
+                if (parseInt(step.id.replace('step', '')) < stepNumber) {
+                    step.classList.add('completed');
+                }
+            });
+            document.getElementById(`step${stepNumber}`).classList.add('active');
+        }
+
+        // Funzione per creare header di autenticazione WordPress
+        function createWordPressAuthHeader(username, password) {
+            return 'Basic ' + btoa(username + ':' + password);
+        }
+
+        // Test connessione WordPress reale
+        async function testConnection() {
+            const url = document.getElementById('wpUrl').value.replace(/\/$/, ''); // Rimuovi slash finale
+            const username = document.getElementById('wpUsername').value;
+            const password = document.getElementById('wpPassword').value;
+
+            if (!url || !username || !password) {
+                showError('Compila tutti i campi per la connessione WordPress');
+                return;
+            }
+
+            document.getElementById('connectionLoading').classList.add('show');
+            document.querySelector('#step1 .btn').disabled = true;
+
+            try {
+                // Test connessione WordPress REST API
+                const authHeader = createWordPressAuthHeader(username, password);
+                
+                // Test di connessione base
+                const testResponse = await fetch(`${url}/wp-json/wp/v2/users/me`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': authHeader,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!testResponse.ok) {
+                    throw new Error(`Errore HTTP: ${testResponse.status}`);
+                }
+
+                const userData = await testResponse.json();
+                console.log('Utente connesso:', userData);
+
+                // Carica categorie reali
+                const categoriesResponse = await fetch(`${url}/wp-json/wp/v2/categories?per_page=100`, {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': authHeader,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!categoriesResponse.ok) {
+                    throw new Error('Errore nel caricamento delle categorie');
+                }
+
+                const categories = await categoriesResponse.json();
+
+                wpConfig = { url, username, password, authHeader };
+                
+                const categorySelect = document.getElementById('category');
+                categorySelect.innerHTML = '<option value="">Seleziona una categoria...</option>';
+                categories.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat.id;
+                    option.textContent = cat.name;
+                    categorySelect.appendChild(option);
+                });
+
+                document.getElementById('connectionIcon').textContent = '✅';
+                document.getElementById('connectionText').textContent = 'Connessione Riuscita!';
+                
+                showSuccess(`Connessione WordPress riuscita! ${categories.length} categorie caricate.`);
+                
+                setTimeout(() => {
+                    activateStep(2);
+                }, 1500);
+
+            } catch (error) {
+                console.error('Errore connessione WordPress:', error);
+                showError(`Errore di connessione: ${error.message}. Verifica URL, username e Application Password.`);
+                document.getElementById('connectionIcon').textContent = '❌';
+                document.getElementById('connectionText').textContent = 'Errore Connessione';
+            } finally {
+                document.getElementById('connectionLoading').classList.remove('show');
+                document.querySelector('#step1 .btn').disabled = false;
+            }
+        }
+
+        // Generazione contenuto con OpenAI reale
+        async function generateContent() {
+            const topic = document.getElementById('topic').value;
+            const postType = document.getElementById('postType').value;
+            const category = document.getElementById('category').value;
+
+            if (!topic || !category) {
+                showError('Inserisci un argomento e seleziona una categoria');
+                return;
+            }
+
+            if (!API_CONFIG.openai.apiKey || API_CONFIG.openai.apiKey === 'YOUR_OPENAI_API_KEY') {
+                showError('Configura la tua API Key OpenAI nel codice');
+                return;
+            }
+
+            document.getElementById('generateLoading').classList.add('show');
+            document.querySelector('#step2 .btn').disabled = true;
+            document.getElementById('generateText').textContent = 'Generazione in corso...';
+
+            try {
+                // Genera contenuto con OpenAI
+                const contentPrompt = createContentPrompt(topic, postType);
+                const generatedText = await callOpenAI(contentPrompt, 'gpt-4');
+
+                // Genera SEO data con OpenAI
+                const seoPrompt = createSEOPrompt(topic);
+                const seoText = await callOpenAI(seoPrompt, 'gpt-3.5-turbo');
+
+                // Parsing della risposta SEO
+                const seoData = parseSEOResponse(seoText, topic);
+                
+                // Estrai titolo dal contenuto generato
+                const title = extractTitleFromContent(generatedText) || generateTitle(topic, postType);
+
+                generatedContent = {
+                    title,
+                    content: generatedText,
+                    ...seoData
+                };
+
+                // Popola i campi
+                document.getElementById('postTitle').value = title;
+                document.getElementById('postContent').value = generatedText;
+                document.getElementById('metaDescription').textContent = seoData.metaDescription;
+                document.getElementById('focusKeyphrase').textContent = seoData.focusKeyphrase;
+
+                // Mostra i tag SEO
+                const tagsContainer = document.getElementById('seoTags');
+                tagsContainer.innerHTML = seoData.tags.map(tag => 
+                    `<span class="seo-tag">${tag}</span>`
+                ).join('');
+
+                document.getElementById('seoInfo').style.display = 'block';
+                
+                showSuccess('Contenuto generato con successo usando OpenAI!');
+                activateStep(3);
+
+            } catch (error) {
+                console.error('Errore generazione contenuto:', error);
+                showError(`Errore nella generazione del contenuto: ${error.message}`);
+            } finally {
+                document.getElementById('generateLoading').classList.remove('show');
+                document.querySelector('#step2 .btn').disabled = false;
+                document.getElementById('generateText').textContent = 'Genera Contenuto SEO';
+            }
+        }
+
+        // Chiamata API OpenAI
+        async function callOpenAI(prompt, model = 'gpt-4') {
+            const response = await fetch(`${API_CONFIG.openai.baseUrl}/chat/completions`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${API_CONFIG.openai.apiKey}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    model: model,
+                    messages: [
+                        {
+                            role: 'system',
+                            content: 'Sei un esperto copywriter SEO che scrive contenuti ottimizzati per il web in italiano.'
+                        },
+                        {
+                            role: 'user',
+                            content: prompt
+                        }
+                    ],
+                    max_tokens: model === 'gpt-4' ? 3000 : 1500,
+                    temperature: 0.7
+                })
+            });
+
+            if (!response.ok) {
+                const error = await response.json();
+                throw new Error(`OpenAI API Error: ${error.error?.message || response.statusText}`);
+            }
+
+            const data = await response.json();
+            return data.choices[0].message.content;
+        }
+
+        // Crea prompt per contenuto
+        function createContentPrompt(topic, postType) {
+            const typeInstructions = {
+                article: 'un articolo informativo e completo',
+                guide: 'una guida tutorial step-by-step',
+                news: 'un articolo di news aggiornato',
+                review: 'una recensione dettagliata',
+                opinion: 'un articolo di opinione con analisi approfondita'
+            };
+
+            return `Scrivi ${typeInstructions[postType]} su "${topic}".
+
+Il contenuto deve essere:
+- Lungo almeno 1000 parole
+- Ottimizzato per SEO
+- Ben strutturato con titoli H2 e H3
+- Include introduzione, corpo principale e conclusione
+- Usa formattazione markdown
+- Includi liste puntate e numerata dove appropriato
+- Scrivi in italiano
+- Usa un tono professionale ma accessibile
+- Includi esempi pratici quando possibile
+
+Inizia con un titolo H1 accattivante e continua con il contenuto completo.`;
+        }
+
+        // Crea prompt per SEO
+        function createSEOPrompt(topic) {
+            return `Per l'argomento "${topic}", genera i seguenti elementi SEO:
+
+1. Meta Description (max 155 caratteri, accattivante per aumentare CTR)
+2. Focus Keyphrase (1-3 parole chiave principali)
+3. 5 Tag correlati (parole chiave secondarie)
+
+Formatta la risposta così:
+META_DESCRIPTION: [descrizione]
+FOCUS_KEYPHRASE: [keyphrase]
+TAGS: [tag1, tag2, tag3, tag4, tag5]
+
+Tutto in italiano, ottimizzato per motori di ricerca italiani.`;
+        }
+
+        // Parsing risposta SEO
+        function parseSEOResponse(seoText, topic) {
+            const lines = seoText.split('\n');
+            let metaDescription = '';
+            let focusKeyphrase = '';
+            let tags = [];
+
+            lines.forEach(line => {
+                if (line.startsWith('META_DESCRIPTION:')) {
+                    metaDescription = line.replace('META_DESCRIPTION:', '').trim();
+                } else if (line.startsWith('FOCUS_KEYPHRASE:')) {
+                    focusKeyphrase = line.replace('FOCUS_KEYPHRASE:', '').trim();
+                } else if (line.startsWith('TAGS:')) {
+                    const tagString = line.replace('TAGS:', '').trim();
+                    tags = tagString.split(',').map(tag => tag.trim());
+                }
+            });
+
+            // Fallback se parsing fallisce
+            if (!metaDescription) {
+                metaDescription = `Scopri tutto su ${topic}: guida completa con consigli pratici e strategie efficaci.`;
+            }
+            if (!focusKeyphrase) {
+                focusKeyphrase = topic.toLowerCase();
+            }
+            if (tags.length === 0) {
+                tags = extractKeywords(topic).slice(0, 5);
+            }
+
+            return { metaDescription, focusKeyphrase, tags };
+        }
+
+        // Estrai titolo dal contenuto
+        function extractTitleFromContent(content) {
+            const h1Match = content.match(/^#\s+(.+)$/m);
+            if (h1Match) {
+                return h1Match[1].trim();
+            }
+            
+            const firstLine = content.split('\n')[0];
+            if (firstLine && firstLine.length < 100) {
+                return firstLine.replace(/^#+\s*/, '').trim();
+            }
+            
+            return null;
+        }
+
+        function generateTitle(topic, type) {
+            const titleTemplates = {
+                article: `Guida Completa: ${topic} - Tutto Quello che Devi Sapere`,
+                guide: `Come ${topic}: Guida Step-by-Step per Principianti`,
+                news: `Ultime Novità su ${topic}: Aggiornamenti 2025`,
+                review: `Recensione Dettagliata: ${topic} - Pro e Contro`,
+                opinion: `La Mia Opinione su ${topic}: Analisi Approfondita`
+            };
+            return titleTemplates[type] || `${topic}: Guida Completa e Aggiornata`;
+        }
+
+        function generatePostContent(topic, type) {
+            return `# Introduzione
+
+Benvenuto in questa guida completa su **${topic}**. In questo articolo esploreremo tutti gli aspetti più importanti di questo argomento, fornendoti informazioni pratiche e aggiornate.
+
+## Cos'è ${topic}?
+
+${topic} è un argomento di grande rilevanza nel panorama attuale. La sua importanza deriva da diversi fattori che analizzeremo nel dettaglio.
+
+## Caratteristiche Principali
+
+Le caratteristiche principali di ${topic} includono:
+
+- **Versatilità**: Si adatta a diverse situazioni e contesti
+- **Efficacia**: Offre risultati concreti e misurabili  
+- **Accessibilità**: È alla portata di tutti, dai principianti agli esperti
+- **Innovazione**: Rappresenta le ultime tendenze del settore
+
+## Come Funziona
+
+Il funzionamento di ${topic} si basa su principi consolidati che garantiscono risultati ottimali. Vediamo i passaggi fondamentali:
+
+1. **Analisi iniziale**: Prima di iniziare, è importante comprendere il contesto
+2. **Pianificazione**: Definire obiettivi chiari e strategie efficaci
+3. **Implementazione**: Mettere in pratica le conoscenze acquisite
+4. **Monitoraggio**: Verificare i risultati e apportare miglioramenti
+
+## Vantaggi e Benefici
+
+I principali vantaggi di ${topic} sono:
+
+- Miglioramento delle performance
+- Ottimizzazione dei processi
+- Maggiore efficienza operativa
+- Risultati misurabili nel tempo
+
+## Considerazioni Importanti
+
+È fondamentale tenere presente alcuni aspetti cruciali quando si lavora con ${topic}:
+
+- La formazione continua è essenziale
+- L'adattamento al proprio contesto è fondamentale
+- I risultati richiedono tempo e costanza
+- L'aggiornamento costante delle competenze è necessario
+
+## Conclusioni
+
+${topic} rappresenta un'opportunità straordinaria per chi vuole eccellere nel proprio campo. Con le giuste conoscenze e l'approccio corretto, è possibile ottenere risultati significativi.
+
+Ricorda che il successo dipende dalla costanza nell'applicazione dei principi appresi e dalla continua ricerca di miglioramento.`;
+        }
+
+        function generateSEOData(topic) {
+            const keywords = extractKeywords(topic);
+            return {
+                metaDescription: `Scopri tutto su ${topic}: guida completa, consigli pratici e strategie efficaci. Informazioni aggiornate e approfondimenti per esperti e principianti.`,
+                focusKeyphrase: keywords[0] || topic.toLowerCase(),
+                tags: keywords.slice(0, 5)
+            };
+        }
+
+        function extractKeywords(topic) {
+            const words = topic.toLowerCase().split(' ');
+            const commonWords = ['il', 'la', 'di', 'da', 'in', 'con', 'su', 'per', 'tra', 'fra', 'a', 'e', 'o', 'ma', 'se', 'come', 'quando', 'dove', 'perché'];
+            return words.filter(word => word.length > 2 && !commonWords.includes(word));
+        }
+
+        // Generazione immagine con Stability AI reale
+        async function generateImage() {
+            const topic = document.getElementById('topic').value;
+            
+            if (!API_CONFIG.stability.apiKey || API_CONFIG.stability.apiKey === 'YOUR_STABILITY_API_KEY') {
+                showError('Configura la tua API Key Stability AI nel codice');
+                return;
+            }
+
+            document.getElementById('imageLoading').classList.add('show');
+            document.querySelector('#step3 .btn:last-child').disabled = true;
+            document.getElementById('imageText').textContent = 'Generazione in corso...';
+
+            try {
+                // Genera prompt per immagine ottimizzato
+                const imagePrompt = await generateImagePrompt(topic);
+                console.log('Prompt immagine:', imagePrompt);
+
+                // Chiamata a Stability AI
+                const response = await fetch(`${API_CONFIG.stability.baseUrl}/generation/stable-diffusion-xl-1024-v1-0/text-to-image`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${API_CONFIG.stability.apiKey}`,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        text_prompts: [
+                            {
+                                text: imagePrompt,
+                                weight: 1
+                            },
+                            {
+                                text: "blurry, bad quality, distorted, low resolution, watermark, text overlay",
+                                weight: -1
+                            }
+                        ],
+                        cfg_scale: 7,
+                        height: 512,
+                        width: 1024,
+                        samples: 1,
+                        steps: 30,
+                        style_preset: "photographic"
+                    })
+                });
+
+                if (!response.ok) {
+                    const error = await response.json();
+                    throw new Error(`Stability AI Error: ${error.message || response.statusText}`);
+                }
+
+                const data = await response.json();
+                
+                if (data.artifacts && data.artifacts.length > 0) {
+                    // Converti base64 in data URL
+                    generatedImage = `data:image/png;base64,${data.artifacts[0].base64}`;
+                    
+                    // Mostra preview
+                    const preview = document.getElementById('imagePreview');
+                    preview.innerHTML = `<img src="${generatedImage}" alt="Immagine generata per ${topic}">`;
+                    preview.classList.add('has-content');
+
+                    // Genera alt text automatico con AI
+                    const altText = await generateImageAltText(topic);
+                    document.getElementById('imageAlt').value = altText;
+
+                    showSuccess('Immagine generata con successo usando Stability AI!');
+                    activateStep(4);
+                    setTimeout(() => activateStep(5), 1000);
+                } else {
+                    throw new Error('Nessuna immagine generata dalla risposta API');
+                }
+
+            } catch (error) {
+                console.error('Errore generazione immagine:', error);
+                showError(`Errore nella generazione dell'immagine: ${error.message}`);
+                
+                // Fallback: genera immagine placeholder
+                generatedImage = await generatePlaceholderImage(topic);
+                const preview = document.getElementById('imagePreview');
+                preview.innerHTML = `<img src="${generatedImage}" alt="Immagine placeholder per ${topic}">`;
+                preview.classList.add('has-content');
+                document.getElementById('imageAlt').value = `Immagine illustrativa per l'articolo su ${topic}`;
+                
+                showError('Utilizzando immagine placeholder. Configura Stability AI per immagini AI.');
+                activateStep(4);
+                setTimeout(() => activateStep(5), 1000);
+                
+            } finally {
+                document.getElementById('imageLoading').classList.remove('show');
+                document.querySelector('#step3 .btn:last-child').disabled = false;
+                document.getElementById('imageText').textContent = 'Genera Immagine SEO';
+            }
+        }
+
+        // Genera prompt per immagine usando AI
+        async function generateImagePrompt(topic) {
+            if (API_CONFIG.openai.apiKey && API_CONFIG.openai.apiKey !== 'YOUR_OPENAI_API_KEY') {
+                try {
+                    const prompt = `Crea un prompt in inglese per generare un'immagine che rappresenti visivamente l'argomento "${topic}".
+
+Il prompt deve essere:
+- Descrittivo e specifico
+- Ottimizzato per Stable Diffusion
+- Professionale e adatto a un blog
+- Include stile fotografico realistico
+- Evita testo nell'immagine
+- Max 100 parole
+
+Esempio: "Professional modern office setup with laptop, smartphone, and coffee cup on wooden desk, natural lighting, clean minimalist style, high quality photography"
+
+Genera solo il prompt, senza spiegazioni aggiuntive.`;
+
+                    return await callOpenAI(prompt, 'gpt-3.5-turbo');
+                } catch (error) {
+                    console.log('Fallback prompt generazione');
+                }
+            }
+            
+            // Fallback prompt
+            return `Professional illustration about ${topic}, modern clean style, high quality, photographic, detailed, 4K resolution`;
+        }
+
+        // Genera alt text per immagine
+        async function generateImageAltText(topic) {
+            if (API_CONFIG.openai.apiKey && API_CONFIG.openai.apiKey !== 'YOUR_OPENAI_API_KEY') {
+                try {
+                    const prompt = `Genera un alt text SEO ottimizzato in italiano per un'immagine che rappresenta l'argomento "${topic}".
+
+L'alt text deve essere:
+- Descrittivo ma conciso (max 125 caratteri)
+- Ottimizzato per SEO
+- Include la parola chiave principale
+- Professionale
+
+Genera solo l'alt text, senza virgolette o spiegazioni.`;
+
+                    return await callOpenAI(prompt, 'gpt-3.5-turbo');
+                } catch (error) {
+                    console.log('Fallback alt text');
+                }
+            }
+            
+            return `Immagine illustrativa per l'articolo su ${topic} - Guida completa e approfondimenti`;
+        }
+
+        // Genera immagine placeholder
+        async function generatePlaceholderImage(topic) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 1024;
+            canvas.height = 512;
+            const ctx = canvas.getContext('2d');
+
+            // Gradiente di sfondo moderno
+            const gradient = ctx.createLinearGradient(0, 0, 1024, 512);
+            gradient.addColorStop(0, '#667eea');
+            gradient.addColorStop(0.5, '#764ba2');
+            gradient.addColorStop(1, '#f093fb');
+            ctx.fillStyle = gradient;
+            ctx.fillRect(0, 0, 1024, 512);
+
+            // Overlay semi-trasparente
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+            ctx.fillRect(0, 0, 1024, 512);
+
+            // Testo principale
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 48px Arial, sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            // Gestione testo multi-linea
+            const words = topic.split(' ');
+            const maxWidth = 800;
+            const lineHeight = 60;
+            const lines = [];
+            let currentLine = words[0];
+
+            ctx.font = 'bold 48px Arial, sans-serif';
+            for (let i = 1; i < words.length; i++) {
+                const word = words[i];
+                const width = ctx.measureText(currentLine + " " + word).width;
+                if (width < maxWidth) {
+                    currentLine += " " + word;
+                } else {
+                    lines.push(currentLine);
+                    currentLine = word;
+                }
+            }
+            lines.push(currentLine);
+
+            // Disegna le linee centrate
+            const startY = 256 - (lines.length - 1) * lineHeight / 2;
+            lines.forEach((line, index) => {
+                ctx.fillText(line, 512, startY + index * lineHeight);
+            });
+
+            // Aggiungi sottotitolo
+            ctx.font = '24px Arial, sans-serif';
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.fillText('Guida Completa e Approfondimenti', 512, startY + lines.length * lineHeight + 40);
+
+            return canvas.toDataURL('image/jpeg', 0.9);
+        }
+
+        async function publishPost() {
+            if (!generatedContent.title || !generatedContent.content || !generatedImage) {
+                showError('Completa tutti i passaggi prima di pubblicare');
+                return;
+            }
+
+            document.getElementById('publishLoading').classList.add('show');
+            document.querySelector('#step5 .btn').disabled = true;
+            document.getElementById('publishText').textContent = 'Pubblicazione in corso...';
+
+            try {
+                // Simula upload dell'immagine
+                await new Promise(resolve => setTimeout(resolve, 2000));
+                const imageId = Math.floor(Math.random() * 1000);
+
+                // Simula creazione del post
+                await new Promise(resolve => setTimeout(resolve, 3000));
+
+                const postData = {
+                    title: document.getElementById('postTitle').value,
+                    content: document.getElementById('postContent').value,
+                    categories: [parseInt(document.getElementById('category').value)],
+                    featured_media: imageId,
+                    status: 'publish',
+                    // Dati AIOSEO simulati
+                    aioseo: {
+                        title: generatedContent.title,
+                        description: generatedContent.metaDescription,
+                        keyphrases: {
+                            focus: generatedContent.focusKeyphrase,
+                            additional: generatedContent.tags
+                        },
+                        og_title: generatedContent.title,
+                        og_description: generatedContent.metaDescription,
+                        twitter_title: generatedContent.title,
+                        twitter_description: generatedContent.metaDescription
+                    }
+                };
+
+                const postId = Math.floor(Math.random() * 10000);
+                const postUrl = `${wpConfig.url}/?p=${postId}`;
+
+                showSuccess(`Post pubblicato con successo! ID: ${postId}`);
+                
+                // Reset form per nuovo post
+                setTimeout(() => {
+                    if (confirm('Post pubblicato! Vuoi creare un nuovo post?')) {
+                        location.reload();
+                    }
+                }, 3000);
+
+            } catch (error) {
+                showError('Errore durante la pubblicazione del post');
+            } finally {
+                document.getElementById('publishLoading').classList.remove('show');
+                document.querySelector('#step5 .btn').disabled = false;
+                document.getElementById('publishText').textContent = 'Pubblica Post su WordPress';
+            }
+        }
+
+        // Event listeners per aggiornamenti real-time
+        document.getElementById('postTitle').addEventListener('input', function() {
+            generatedContent.title = this.value;
+        });
+
+        document.getElementById('postContent').addEventListener('input', function() {
+            generatedContent.content = this.value;
+        });
+
+        // Inizializzazione
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('WordPress SEO Publisher inizializzato');
+        });
+    </script>
+</body>
+</html>
